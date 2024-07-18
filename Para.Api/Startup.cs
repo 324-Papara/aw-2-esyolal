@@ -12,7 +12,7 @@ using Para.Bussiness;
 using Para.Bussiness.Cqrs;
 using Para.Data.Context;
 using Para.Data.UnitOfWork;
-using Para.Data.Validators;
+using Para.Schema.Validators;
 
 namespace Para.Api;
 

@@ -1,12 +1,6 @@
 ﻿using FluentValidation;
-using Para.Schema;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Para.Bussiness.Validations
+namespace Para.Schema.Validators
 {
     public class CustomerPhoneValidator : AbstractValidator<CustomerPhoneRequest>
     {

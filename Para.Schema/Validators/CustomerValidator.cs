@@ -1,11 +1,9 @@
 ﻿using FluentValidation;
-using Para.Schema;
-
-
-namespace Para.Data.Validators
+namespace Para.Schema.Validators
 {
     public class CustomerValidator : AbstractValidator<CustomerRequest>
     {
+
         public CustomerValidator()
         {
             RuleFor(customer => customer.FirstName)
@@ -21,12 +19,6 @@ namespace Para.Data.Validators
             RuleFor(customer => customer.IdentityNumber)
                 .NotEmpty().WithMessage("Identity number is required.")
                 .Length(11).WithMessage("Identity number must be 11 characters.");
-
-           RuleFor(x => x.CustomerNumber)
-                .NotEmpty()
-                .WithMessage("Number is required")
-                .InclusiveBetween(1, 10000)
-                .WithMessage("Customer number must be between 1-10000");
 
             RuleFor(customer => customer.DateOfBirth)
                 .NotEmpty().WithMessage("Date of birth is required.");

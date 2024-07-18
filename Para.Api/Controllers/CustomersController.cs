@@ -1,10 +1,8 @@
-using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Para.Base.Response;
 using Para.Bussiness.Cqrs;
-using Para.Data.Validators;
+using Para.Schema.Validators;
 using Para.Schema;
 
 namespace Para.Api.Controllers

@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using Para.Schema;
 
-namespace Para.Bussiness.Validations
+namespace Para.Schema.Validators
 {
     public class CustomerDetailValidator : AbstractValidator<CustomerDetailRequest>
     {
