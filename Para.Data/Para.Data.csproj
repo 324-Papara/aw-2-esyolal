@@ -23,9 +23,5 @@
     <ItemGroup>
       <ProjectReference Include="..\Para.Base\Para.Base.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Para.Base\Para.Base.csproj" />
-    </ItemGroup>
-
+  
 </Project>

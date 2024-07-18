@@ -4,6 +4,11 @@ using Para.Base.Response;
 using Para.Bussiness.Cqrs;
 using Para.Schema.Validators;
 using Para.Schema;
+using Microsoft.EntityFrameworkCore;
+using Para.Data.Context;
+using Para.Data.Domain;
+using Para.Data.UnitOfWork;
+using System.Linq.Expressions;
 
 namespace Para.Api.Controllers
 {
@@ -12,10 +17,14 @@ namespace Para.Api.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly IMediator mediator;
+        private readonly ParaDbContext _dbContext;
+        private readonly IUnitOfWork unitOfWork;
 
-        public CustomersController(IMediator mediator)
+        public CustomersController(IMediator mediator, ParaDbContext dbContext, IUnitOfWork unitOfWork)
         {
             this.mediator = mediator;
+            _dbContext = dbContext;
+            this.unitOfWork = unitOfWork;
         }
 
 
@@ -38,14 +47,15 @@ namespace Para.Api.Controllers
         [HttpPost]
         public async Task<ApiResponse<CustomerResponse>> Post([FromBody] CustomerRequest value)
         {
-            var validator = new CustomerValidator();
+
+            var validator = new CustomerValidator(_dbContext);
             var validationResult = validator.Validate(value);
 
             if (!validationResult.IsValid)
             {
                 var errorResponse = new ApiResponse<CustomerResponse>(false)
                 {
-                    Message = "Validation errors occurred",
+                    Message = validationResult.Errors.FirstOrDefault()?.ErrorMessage
                 };
                 return errorResponse;
             }
@@ -69,6 +79,26 @@ namespace Para.Api.Controllers
             var operation = new DeleteCustomerCommand(customerId);
             var result = await mediator.Send(operation);
             return result;
+        }
+        //Include kullanarak modelleri birbirine ekledik.
+        [HttpGet("with-addresses-and-phones")]
+        public async Task<ApiResponse<List<Customer>>> Include()
+        {
+            var customers = await unitOfWork.CustomerRepository.Include(
+                x => x.CustomerAddresses,
+                x => x.CustomerPhones
+            );
+
+            return new ApiResponse<List<Customer>>(customers);
+        }
+        //Where kullanım örneği
+        [HttpGet("where-name")]
+        public async Task<ApiResponse<List<Customer>>> Where(string name)
+        {
+            Expression<Func<Customer, bool>> a = x => x.FirstName == name;
+            var customers = await unitOfWork.CustomerRepository.Where(a);
+
+            return new ApiResponse<List<Customer>>(customers);
         }
     }
 }
